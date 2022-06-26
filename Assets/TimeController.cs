@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class TimeController : MonoBehaviour
 {
+    private void Start()
+    {
+        Time.timeScale = 1.0f;
+    }
     private void Update()
     {
         //Time.deltaTime 사양이 다른 컴퓨터에서도 동일한 결과를 만들기 위해서
