@@ -39,10 +39,14 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+
+        bestScore = PlayerPrefs.GetInt("bestScore");
     }
     private void OnDestroy()
     {
         instance = null;
+        PlayerPrefs.SetInt("bestScore", bestScore);
+        PlayerPrefs.Save();
     }
     public GameOverUI gameOverUI;
     public enum Dicrection { Right, Left }

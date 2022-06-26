@@ -13,6 +13,8 @@ public class Block : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (enabled == false)
+            return;
         if (collision.collider.CompareTag("Player") == false)
             return;
 
