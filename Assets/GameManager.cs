@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum Dicrection { Right, Left}
 
 public class GameManager : MonoBehaviour
 {
+    public enum Dicrection { Right, Left }
     // 블럭 왼쪽에서 스폰
     // 오른쪽에서 스폰
     // 반복
@@ -48,7 +48,7 @@ public class GameManager : MonoBehaviour
 
             while (waitNextBlock)
             {
-                yield return null; // 1양보하겠다.
+                yield return null; // 1 프레임 양보하겠다.
             }
             level++;
             moveDirection = moveDirection == Dicrection.Right ? Dicrection.Left : Dicrection.Right;
