@@ -16,28 +16,27 @@ public class GameManager : MonoBehaviour
     {
         instance = null;
     }
-
+    public GameOverUI gameOverUI;
     internal void GameOver()
     {
+        if (score > bestScore)
+            bestScore = score;
+
+
         // GameOver UI표시.
+        gameOverUI.ShowScore(score, bestScore);
 
 
+        // 블럭 소환하는 로직 멈추기.
     }
 
     public enum Dicrection { Right, Left }
-    // 블럭 왼쪽에서 스폰
-    // 오른쪽에서 스폰
-    // 반복
 
-    // x 오른쪽으로 움직일 때는 
-    // x 위치 -
-    // 왼쪽으로 움직일때는 x 위치 양수
-
-    // y는 반복될때마다 1씩 올림(1 블럭의 높이)
     public Block block;
     public Dicrection moveDirection = Dicrection.Right; // 오른쪽으로 움직인다.(왼쪽에 생성해서 오른쪽으로 이동)
 
     public int score;
+    public int bestScore;
     public TextMeshProUGUI scoreText;
     public void SetNextLevel()
     {
