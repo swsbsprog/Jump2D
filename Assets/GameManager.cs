@@ -1,3 +1,4 @@
+using EasyButtons;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,6 +8,33 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    #region 코루틴 샘플
+    //Coroutine myCoHandle;
+    //[Button]
+    //void CoStart()
+    //{
+    //    print("CoStart");
+    //    myCoHandle = StartCoroutine(MyCo());
+    //    //StartCoroutine("MyCo");
+    //}
+    //[Button]
+    //void CoStop()
+    //{
+    //    StopCoroutine(myCoHandle);
+    //    //StopCoroutine("MyCo");
+    //}
+    //IEnumerator MyCo()
+    //{
+    //    while (true)
+    //    {
+    //        yield return new WaitForSeconds(1);
+    //        print(Time.time);
+    //    }
+    //}
+    #endregion 코루틴 샘플
+
+
+
     static public GameManager instance;
     private void Awake()
     {
@@ -17,19 +45,6 @@ public class GameManager : MonoBehaviour
         instance = null;
     }
     public GameOverUI gameOverUI;
-    internal void GameOver()
-    {
-        if (score > bestScore)
-            bestScore = score;
-
-
-        // GameOver UI표시.
-        gameOverUI.ShowScore(score, bestScore);
-
-
-        // 블럭 소환하는 로직 멈추기.
-    }
-
     public enum Dicrection { Right, Left }
 
     public Block block;
@@ -52,9 +67,46 @@ public class GameManager : MonoBehaviour
     private float level = 0;
     public float offsetX = 3; // 블럭이 생성되는 위치.
     public float blockSpeed = 3;
-    private IEnumerator Start()
+
+    internal void GameOver()
     {
+        if (score > bestScore)
+            bestScore = score;
+        // GameOver UI표시.
+        gameOverUI.ShowScore(score, bestScore);
+
+        // 블럭 소환하는 로직 멈추기.
+        StopCo();
+
+        // 시간 스케일 0으로 해서 게임 로직 멈추기
+        //Time.timeScale = 0;
+        gameState = GameStateType.GameOver;
+    }
+    public enum GameStateType { BeforePlay, Play, GameOver}
+    public GameStateType gameState = GameStateType.BeforePlay;
+
+    Coroutine spawnBlockCoHandle;
+    private void Start()
+    {
+        spawnBlockCoHandle = StartCoroutine(SpawnBlockCo());
+    }
+    void StopCo() { StopCoroutine(spawnBlockCoHandle); }
+
+    public TextMeshProUGUI countdownText;
+    private IEnumerator SpawnBlockCo()
+    {
+        gameState = GameStateType.BeforePlay;
+        // 3,2,1
+        countdownText.text = "3";
+        yield return new WaitForSeconds(1);
+        countdownText.text = "2";
+        yield return new WaitForSeconds(1);
+        countdownText.text = "1";
+        yield return new WaitForSeconds(1);
+        countdownText.gameObject.SetActive(false);
+
         scoreText.text = "";
+        gameState = GameStateType.Play;
         while (true)
         {
             print(level);
