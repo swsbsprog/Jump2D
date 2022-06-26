@@ -16,9 +16,9 @@ public class GameOverUI : MonoBehaviour
         bestScoreText.text = bestScore.ToString();
     }
 
-    //public void Retry()
-    //{
-    //    // 처음부터 다시.
-    //    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-    //}
+    public void Retry()
+    {
+        // 처음부터 다시.
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
 }
