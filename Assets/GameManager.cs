@@ -1,10 +1,29 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 
 public class GameManager : MonoBehaviour
 {
+    static public GameManager instance;
+    private void Awake()
+    {
+        instance = this;
+    }
+    private void OnDestroy()
+    {
+        instance = null;
+    }
+
+    internal void GameOver()
+    {
+        // GameOver UI표시.
+
+
+    }
+
     public enum Dicrection { Right, Left }
     // 블럭 왼쪽에서 스폰
     // 오른쪽에서 스폰
@@ -17,6 +36,17 @@ public class GameManager : MonoBehaviour
     // y는 반복될때마다 1씩 올림(1 블럭의 높이)
     public Block block;
     public Dicrection moveDirection = Dicrection.Right; // 오른쪽으로 움직인다.(왼쪽에 생성해서 오른쪽으로 이동)
+
+    public int score;
+    public TextMeshProUGUI scoreText;
+    public void SetNextLevel()
+    {
+        waitNextBlock = false;
+        score += 100;
+        // ui에 score표시하자.
+        scoreText.text = score.ToString();
+    }
+
     public bool waitNextBlock = true; // true인 동안 기다리자.
     private float initY = -3;
     private float blockHeight = 1;
@@ -25,6 +55,7 @@ public class GameManager : MonoBehaviour
     public float blockSpeed = 3;
     private IEnumerator Start()
     {
+        scoreText.text = "";
         while (true)
         {
             print(level);
@@ -53,10 +84,22 @@ public class GameManager : MonoBehaviour
             level++;
             moveDirection = moveDirection == Dicrection.Right ? Dicrection.Left : Dicrection.Right;
         }
+
+        // 레벨 증가할때마다 카메라 위로올리기.
+
+        // 플레이어 죽음(GameOver UI 표시)
+        // 기초 단계
+
+
+        // 평균
+        // 타이틀씬 Touch!
+        // 3,2,1게임시작
+
+        // 최고 점수 기록 (앱 재시작해도 유지되어야함)
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space)) waitNextBlock = false;
+        //if (Input.GetKeyDown(KeyCode.Space)) waitNextBlock = false;
 
     }
 }

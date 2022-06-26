@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Block : MonoBehaviour
 {
+
     public float speed = 3;
     void Update()
     {
@@ -20,6 +21,8 @@ public class Block : MonoBehaviour
         enabled = false;
 
         // 다음 블럭 나오게 하기. -> GameManager
+        //FindObjectOfType<GameManager>().waitNextBlock = false;
+        GameManager.instance.SetNextLevel();
 
         // 점수 추가 하기 -> GameManager
     }
