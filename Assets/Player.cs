@@ -17,7 +17,20 @@ public class Player : MonoBehaviour
         if (Time.timeScale == 0)
             return;
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.anyKeyDown) // 모바일에서 작동하도록 바꿈
             rb.AddForce(jumpForce, ForceMode2D.Impulse);
+
+        //bool isDown = false;
+        //foreach (var touch in Input.touches)
+        //{
+        //    if (touch.phase == TouchPhase.Began)
+        //    {
+        //        isDown = true;
+        //        break;
+        //    }
+        //}
+
+        //if (isDown) // 모바일에서 작동하도록 바꿈
+        //    rb.AddForce(jumpForce, ForceMode2D.Impulse);
     }
 }
