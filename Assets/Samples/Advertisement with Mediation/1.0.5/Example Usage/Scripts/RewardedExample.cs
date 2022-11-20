@@ -10,6 +10,7 @@ namespace Unity.Services.Mediation.Samples
     /// </summary>
     public class RewardedExample : MonoBehaviour
     {
+        public static RewardedExample Instance { get; private set; }    
         [Header("Ad Unit Ids"), Tooltip("Android Ad Unit Ids")]
         public string androidAdUnitId;
         [Tooltip("iOS Ad Unit Ids")]
@@ -24,6 +25,7 @@ namespace Unity.Services.Mediation.Samples
 
         async void Start()
         {
+            Instance = this;
             try
             {
                 Debug.Log("Initializing...");
@@ -59,6 +61,12 @@ namespace Unity.Services.Mediation.Samples
 #endif
 
             return initializationOptions;
+        }
+
+        public void ShowRewarded(Action<object, RewardEventArgs> onUserRewarded)
+        {
+            this.onUserRewarded = onUserRewarded;
+            ShowRewarded();
         }
 
         public async void ShowRewarded()
@@ -161,9 +169,11 @@ namespace Unity.Services.Mediation.Samples
             Debug.Log($"Initialization Failed: {initializationError}:{error.Message}");
         }
 
+        public Action<object, RewardEventArgs>  onUserRewarded;
         void UserRewarded(object sender, RewardEventArgs e)
         {
             Debug.Log($"User Rewarded! Type: {e.Type} Amount: {e.Amount}");
+            onUserRewarded?.Invoke(sender, e);
         }
 
         void AdClosed(object sender, EventArgs args)

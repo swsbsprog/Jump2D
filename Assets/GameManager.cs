@@ -3,6 +3,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Services.Mediation;
+using Unity.Services.Mediation.Samples;
 using UnityEngine;
 
 
@@ -91,9 +93,15 @@ public class GameManager : MonoBehaviour
     }
     public void Continue()
     {
+        RewardedExample.Instance.ShowRewarded(OnUserRewarded);
+    }
+    void OnUserRewarded(object sender, RewardEventArgs e)
+    {
+        print($"sender:{sender}, e:{e}");
+
         //플레이어죽인 마지막 블럭 삭제
         Destroy(lastBlock.gameObject);
-        
+
         gameOverUI.gameObject.SetActive(false);
         gameState = GameStateType.Play;
         Player.Instance.transform.localRotation = Quaternion.identity;
