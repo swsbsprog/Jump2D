@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public static Player Instance { get; private set; } 
+
     public Rigidbody2D rb;
     public Vector2 jumpForce = new Vector2(0, 7);
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        Instance = this;
     }
     void Update()
     {

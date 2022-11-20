@@ -59,6 +59,9 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI scoreText;
     public void SetNextLevel()
     {
+        if (gameState == GameStateType.GameOver)
+            return;
+
         waitNextBlock = false;
         score += 100;
         // ui에 score표시하자.
@@ -86,6 +89,16 @@ public class GameManager : MonoBehaviour
         //Time.timeScale = 0;
         gameState = GameStateType.GameOver;
     }
+    public void Continue()
+    {
+        //플레이어죽인 마지막 블럭 삭제
+        Destroy(lastBlock.gameObject);
+        
+        gameOverUI.gameObject.SetActive(false);
+        gameState = GameStateType.Play;
+        Player.Instance.transform.localRotation = Quaternion.identity;
+        Start();
+    }
     public enum GameStateType { BeforePlay, Play, GameOver}
     public GameStateType gameState = GameStateType.BeforePlay;
 
@@ -97,10 +110,12 @@ public class GameManager : MonoBehaviour
     void StopCo() { StopCoroutine(spawnBlockCoHandle); }
 
     public TextMeshProUGUI countdownText;
+    Block lastBlock;
     private IEnumerator SpawnBlockCo()
     {
         gameState = GameStateType.BeforePlay;
         // 3,2,1
+        countdownText.gameObject.SetActive(true);
         countdownText.text = "3";
         yield return new WaitForSeconds(1);
         countdownText.text = "2";
@@ -116,7 +131,7 @@ public class GameManager : MonoBehaviour
             print(level);
             waitNextBlock = true;
 
-            var newBlock = Instantiate(block);
+            Block newBlock = Instantiate(block);
             float regenX;
             if (moveDirection == Dicrection.Right) // 왼쪽에 생성되어서 오른쪽으로 이동한다
             {
@@ -131,7 +146,7 @@ public class GameManager : MonoBehaviour
             //float regenX = moveDirection == Dicrection.Right ? -offsetX : offsetX;
             float regenY = initY + level * blockHeight;
             newBlock.transform.position = new Vector2(regenX, regenY);
-
+            lastBlock = newBlock;
             while (waitNextBlock)
             {
                 yield return null; // 1 프레임 양보하겠다.
